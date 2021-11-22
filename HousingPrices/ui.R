@@ -26,7 +26,7 @@ shinyUI(fluidPage(
       #Choose variables for data exploration
       selectInput("xvar", "Select X variable",c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
       
-      selectInput("ybar", "Select Y variable",c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+      selectInput("yvar", "Select Y variable",c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
       # Give graph options based on variable selected
       radioButtons("GraphSelect",
                   "Choose a graph",
@@ -34,9 +34,11 @@ shinyUI(fluidPage(
       
 # Subset the data
 
-sliderInput("xValueselect", "Select a range",
-            min = 1, max = 10,  value = c(1,10), ticks = FALSE),
-      
+sliderInput("xValueselect", "Select a range for the x variable",
+            min = 1, max = 10,  value = c(1,10), ticks=FALSE),
+
+sliderInput("yValueselect", "Select a range for the y variable",
+            min = 1, max = 10,  value = c(1,10), ticks=FALSE),
 
        
     ), #This ends sidebarPanel
