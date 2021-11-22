@@ -99,7 +99,7 @@ output$edaPlot <- renderPlot({
 
         ggplot(data = plotDataScatter, aes_string(x = input$xvar, y = input$yvar))  +
         geom_point( color = 'Red') + 
-        geom_smooth(method='lm')
+        geom_smooth(method ='lm')
         
       }else{
         output$LSRL <- renderText({
