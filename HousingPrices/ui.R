@@ -22,17 +22,30 @@ shinyUI(fluidPage(
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
-       sliderInput("bins",
-                   "Number of bins:",
-                   min = 1,
-                   max = 50,
-                   value = 30)
-    ),
+      
+      #Choose variables for data exploration
+      selectInput("xvar", "Select X variable",c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+      
+      selectInput("ybar", "Select Y variable",c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+      # Give graph options based on variable selected
+      radioButtons("GraphSelect",
+                  "Choose a graph",
+                  c("Histogram" = "1", "Scatter Plot" = "2", "Bar Plot" = "3")),
+      
+# Subset the data
+
+sliderInput("xValueselect", "Select a range",
+            min = 1, max = 10,  value = c(1,10), ticks = FALSE),
+      
+
+       
+    ), #This ends sidebarPanel
     
     # Show a plot of the generated distribution
     mainPanel(
-       plotOutput("distPlot")
-    )# This ends SidebarPanel 
+       plotOutput("edaPlot"),
+       textOutput("check")
+    )# This ends mainPanel 
   ) # This ends Data Exploration tab
 ),
 tabPanel("Modeling",
