@@ -30,7 +30,10 @@ shinyUI(fluidPage(
       # Give graph options based on variable selected
       radioButtons("GraphSelect",
                   "Choose a graph",
-                  c("Histogram" = "1", "Scatter Plot" = "2", "Bar Plot" = "3")),
+                  c("Histogram of X Variable" = "1", "Histogram of Y Variable" = "2","Scatter Plot of X VS Y" = "3")),
+      conditionalPanel(
+        condition = "input.GraphSelect == '3'",
+        checkboxInput("LSRL", "Add best fit line", FALSE)),
       
 # Subset the data
 
@@ -46,7 +49,13 @@ sliderInput("yValueselect", "Select a range for the y variable",
     # Show a plot of the generated distribution
     mainPanel(
        plotOutput("edaPlot"),
-       textOutput("check")
+       textOutput("check"),
+       textOutput("LSRL"),
+       tableOutput("LSRLsummary"),
+       fluidRow(
+         splitLayout(cellWidths = c("50%", "50%"), tableOutput("xTable"), tableOutput("yTable"))
+       )
+
     )# This ends mainPanel 
   ) # This ends Data Exploration tab
 ),

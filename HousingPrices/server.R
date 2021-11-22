@@ -10,19 +10,13 @@
 library(shiny)
 library(tidyverse)
 house <- read_csv("train.csv")
+
+
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
-   
-# Main plot
-  #Observe to see if the variable has changed
 
-
-
-     
-
-  # Update the x variable slider
+    # Update the x variable slider
   observe({
-    
     #Subset the data to only be the x variable
     house2 <- house %>% select(input$xvar)
     minxvalue <- min(house2)
@@ -44,17 +38,9 @@ shinyServer(function(input, output, session) {
     #Close update slider function
   })      
   
-  
-
-  
-  
   # Create the main plot
-  output$check <- renderText({
 
-      minvalue <- input$yValueselect[1]
-      maxvalue <- input$yValueselect[2]
-      output <- c(input$yvar, minvalue, maxvalue)
-  })
+  
 
 # Function to create main plot  
 output$edaPlot <- renderPlot({
@@ -65,31 +51,71 @@ output$edaPlot <- renderPlot({
       minYvalue <- input$yValueselect[1]
       maxYvalue <- input$yValueselect[2]
       
-      plotData <- house %>% filter( !!rlang::sym(input$xvar) >= minXvalue &  !!rlang::sym(input$xvar) <= maxXvalue)
+      XData <- house %>% filter( !!rlang::sym(input$xvar) >= minXvalue &  !!rlang::sym(input$xvar) <= maxXvalue)
     
-      plotDataScatter <- plotData %>% filter( !!rlang::sym(input$yvar) >= minYvalue &  !!rlang::sym(input$yvar) <= maxYvalue)
+      YData <- house %>% filter( !!rlang::sym(input$yvar) >= minYvalue &  !!rlang::sym(input$yvar) <= maxYvalue)
+      
+      plotDataScatter <- XData %>% filter( !!rlang::sym(input$yvar) >= minYvalue &  !!rlang::sym(input$yvar) <= maxYvalue)
+      
+      output$xTable <- renderTable({
+        summaryX <- XData %>% select(!!rlang::sym(input$xvar)) %>% summary() 
+      })
+      output$yTable <- renderTable({
+        summaryY <- YData %>% select(!!rlang::sym(input$yvar)) %>% summary()
+        summaryY
+      })
+
     #Create the base plot
-    plot <- ggplot(data = plotData) 
+    plot <- ggplot(data = XData) 
     
     #Create plot based on button selected
     
-    #Create histogram
+    #Create histogram of x variable
     if(input$GraphSelect == 1){
-        plot + 
+      ggplot(data = XData) + 
         geom_histogram(aes_string(x = input$xvar), color = 'black', fill = 'blue')
-    
-    #Create Bar plot 
-    }else if (input$GraphSelect == 3){
-        plot + 
-        geom_bar(aes_string(x = input$xvar))
-    }
-    
+
+      
+    #Create histogram of y variable
+      }else if(input$GraphSelect == 2){
+        
+        ggplot(data = YData) +
+        geom_histogram(aes_string(x = input$yvar), color = 'black', fill = 'blue')  
+        
+
     #Create Scatter Plot
-    else{
-      ggplot(data = plotDataScatter)  +
-        geom_point(aes_string(x = input$xvar, y = input$yvar), color = 'Red')
+    }else{
+      if(input$LSRL == "TRUE"){
+
+          output$LSRL <- renderText({
+            fit <- lm(as.formula(paste(input$yvar," ~ ",input$xvar)), data=plotDataScatter)
+            intercept <- fit$coefficients[1]
+            slope <- fit$coefficients[2]
+            output <- paste("The intercept is",
+                            round(intercept,3),
+                            "and the slope is",
+                            round(slope,3))
+          })
+
+        ggplot(data = plotDataScatter, aes_string(x = input$xvar, y = input$yvar))  +
+        geom_point( color = 'Red') + 
+        geom_smooth(method='lm')
+        
+      }else{
+        output$LSRL <- renderText({
+        })
+        ggplot(data = plotDataScatter, aes_string(x = input$xvar, y = input$yvar)) +
+          geom_point( color = 'Red') 
+        
+        
+      }
     }
+    #End the plotting panel
   })
 
 
+
+
+
+# End the Server side
 })
