@@ -59,18 +59,46 @@ sliderInput("yValueselect", "Select a range for the y variable",
     )# This ends mainPanel 
   ) # This ends Data Exploration tab
 ),
-tabPanel("Modeling",
-         sidebarLayout(
-           sidebarPanel(
-             h1("Words!")
-           ), #This ends sidebarPanel
-           mainPanel(
-             plotOutput("distPlotmodel")
-           )#This ends mainPanel
-          ) #This ends sidebarLayout
-        
-        ), #This ends Modeling tab
+navbarMenu("Modeling", 
+           tabPanel("Modeling Info", 
+                    sidebarLayout(
+                      sidebarPanel(
+                        
+                        
+                        h1("Words!")
+                      ), #This ends sidebarPanel
+                      mainPanel(
+                        
+                      )#This ends mainPanel
+                    ) #This ends sidebarLayout
+           ), #This ends Modeling info tab
+           tabPanel("Model Fitting", 
+                    sidebarLayout(
+                      sidebarPanel(
+                        
+                        
+                        h1("Words!")
+                      ), #This ends sidebarPanel
+                      mainPanel(
+                        
+                      )#This ends mainPanel
+                    ) #This ends sidebarLayout
+           ), #This ends Modeling info tab
+           tabPanel("Prediction", 
+                    sidebarLayout(
+                      sidebarPanel(
+                        
+                        
+                        h1("Words!")
+                      ), #This ends sidebarPanel
+                      mainPanel(
+                        
+                      )#This ends mainPanel
+                    ) #This ends sidebarLayout
+           ), #This ends Prediction tab
+),
 
+         
 tabPanel("Data",
          sidebarLayout(
            sidebarPanel(
@@ -81,7 +109,8 @@ tabPanel("Data",
            )#This ends mainPanel
          ) #This ends sidebarLayout
          
-) #This ends Data tab         
+)#This ends Data tab 
+
   #This ends navbarPage
   )
   #This ends ShinyUI Fluidpage
