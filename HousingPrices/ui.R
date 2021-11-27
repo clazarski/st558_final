@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(DT)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
@@ -75,12 +76,28 @@ navbarMenu("Modeling",
            tabPanel("Model Fitting", 
                     sidebarLayout(
                       sidebarPanel(
+                        selectInput("train", label = "Select proportion of data to be used for training", c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1), selected = .8),
+                        actionButton("splitbutton", "Create data sets"),
+                        selectInput("yvariable", label = "Y variable", "SalePrice"),
+                        checkboxGroupInput('mlrmodelinputs','Variables for MLR model', choices = c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+                        checkboxGroupInput('treemodelinputs','Variables for Tree model', choices = c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+                        checkboxGroupInput('rfmodelinputs','Variables for random forest model', choices = c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+                        actionButton("button", "Run Models"),
                         
                         
-                        h1("Words!")
+                        
+                       
                       ), #This ends sidebarPanel
                       mainPanel(
-                        
+                        h1("MLR model results"),
+                        verbatimTextOutput("mlrmodel"),
+                        h1("Tree model results"),
+                        verbatimTextOutput("treemodel"),
+                        h1("Random Forest model results"),
+                        verbatimTextOutput("rfmodel"),
+                        h1("Comparison of models using test data"),
+                        verbatimTextOutput("predictions"),
+                        verbatimTextOutput("result")
                       )#This ends mainPanel
                     ) #This ends sidebarLayout
            ), #This ends Modeling info tab
@@ -102,10 +119,11 @@ navbarMenu("Modeling",
 tabPanel("Data",
          sidebarLayout(
            sidebarPanel(
-             h1("Words!")
+             
+             selectInput("Column", label = "Choose column", c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr"), multiple = TRUE),
            ), #This ends sidebarPanel
            mainPanel(
-             h1("More words!")
+             DT::dataTableOutput("fancyTable")
            )#This ends mainPanel
          ) #This ends sidebarLayout
          

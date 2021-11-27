@@ -9,6 +9,10 @@
 
 library(shiny)
 library(tidyverse)
+library(DT)
+library(tree)
+library(caret)
+library(randomForest)
 house <- read_csv("train.csv")
 
 
@@ -113,8 +117,103 @@ output$edaPlot <- renderPlot({
     #End the plotting panel
   })
 
+#Create the train and test data sets
+traindata <- reactive({
+  set.seed(1234)
+  splitsize <- as.numeric(input$train)
+  numObs <- nrow(house)
+  index <- sample(1:numObs, size = splitsize*numObs, replace =FALSE)
+  traindata <- house[index,]
+})
+
+testdata <- reactive({
+  set.seed(1234)
+  splitsize <- as.numeric(input$train)
+  numObs <- nrow(house)
+  index <- sample(1:numObs, size = splitsize*numObs, replace =FALSE)
+  testdata <- house[-index,]
+})
 
 
+
+
+
+mlrFit <- eventReactive(input$button,{
+  formula <- as.formula(paste(input$yvariable," ~ ",paste(input$mlrmodelinputs, collapse = "+")))
+  
+  fit <- train(formula, data = traindata(),
+               method = "lm",
+               trControl = trainControl(method = "cv",number = 5))
+})
+
+
+
+treeFit <- eventReactive(input$button,{
+  formula <- as.formula(paste(input$yvariable," ~ ",paste(input$treemodelinputs, collapse = "+")))
+  fit <- tree(formula, data=traindata())
+  
+})
+
+
+
+rfFit <- eventReactive(input$button,{
+  formula <- as.formula(paste(input$yvariable," ~ ",paste(input$rfmodelinputs, collapse = "+")))
+  fit <- train(formula, data = traindata(),
+                 method = "rf",
+                 trControl = trainControl(method = "cv",
+                                          number = 5),
+                 tuneGrid = data.frame(mtry = 1:3))
+})
+
+mlrpred  <- reactive({
+  predtreefit <- predict(mlrFit(), newdata = testdata())
+  results <- postResample(predtreefit, testdata()$SalePrice)
+})
+treepred <- reactive({
+  predtreefit <- predict(treeFit(), newdata = testdata())
+  results <- postResample(predtreefit, testdata()$SalePrice)
+})
+rfpred <- reactive({
+  predtreefit <- predict(rfFit(), newdata = testdata())
+  results <- postResample(predtreefit, testdata()$SalePrice)
+})
+
+output$mlrmodel <- renderPrint({
+  results <- summary(mlrFit())
+  print(results)
+})
+
+output$treemodel <- renderPrint({
+  results <- summary(treeFit())
+  print(results)
+})
+
+output$rfmodel <- renderPrint({
+  results <- summary(rfFit()$results)
+  print(results)
+})
+
+output$predictions <- renderPrint({
+  results <- data.frame(treepred(), mlrpred(), rfpred())
+  #results <- data.frame(results)
+  print(results)
+})
+
+# Create data table for data tab
+data <- reactive({house})
+
+output$fancyTable <- DT::renderDataTable(datatable(data(), 
+                                                   extensions = 'Buttons',
+                                                   options = list( 
+                                                     dom = "Blfrtip",
+                                                     buttons = 
+                                                       list("copy", list(
+                                                         extend = "collection"
+                                                         , buttons = c("csv", "excel", "pdf")
+                                                         , text = "Download"
+                                                       ) ) 
+                                                   ))# end of buttons customizationselection = list(target = 'row+column'))
+) #End output table function
 
 
 # End the Server side
