@@ -79,9 +79,9 @@ navbarMenu("Modeling",
                         selectInput("train", label = "Select proportion of data to be used for training", c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1), selected = .8),
                         actionButton("splitbutton", "Create data sets"),
                         selectInput("yvariable", label = "Y variable", "SalePrice"),
-                        checkboxGroupInput('mlrmodelinputs','Variables for MLR model', choices = c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
-                        checkboxGroupInput('treemodelinputs','Variables for Tree model', choices = c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
-                        checkboxGroupInput('rfmodelinputs','Variables for random forest model', choices = c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+                        checkboxGroupInput('mlrmodelinputs','Variables for MLR model', choices = c("Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+                        checkboxGroupInput('treemodelinputs','Variables for Tree model', choices = c("Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+                        checkboxGroupInput('rfmodelinputs','Variables for random forest model', choices = c("Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
                         actionButton("button", "Run Models"),
                         
                         
@@ -90,10 +90,13 @@ navbarMenu("Modeling",
                       ), #This ends sidebarPanel
                       mainPanel(
                         h1("MLR model results"),
+                        verbatimTextOutput("mlrformula"),
                         verbatimTextOutput("mlrmodel"),
                         h1("Tree model results"),
+                        verbatimTextOutput("treeformula"),
                         verbatimTextOutput("treemodel"),
                         h1("Random Forest model results"),
+                        verbatimTextOutput("rfformula"),
                         verbatimTextOutput("rfmodel"),
                         h1("Comparison of models using test data"),
                         verbatimTextOutput("predictions"),
@@ -104,9 +107,20 @@ navbarMenu("Modeling",
            tabPanel("Prediction", 
                     sidebarLayout(
                       sidebarPanel(
+                        selectInput("model", label = "Select model for prediction", c("MLR", "Tree", "Random Forest")),
                         
+                  numericInput("LotArea", "Lot Area", value = 0),
+                  numericInput("BldgType", "Building Type", value = 0),
+                  numericInput("YearBuilt", "Year BUilt", value = 0),
+                  numericInput("GrLivArea", "Square Footage", value = 0),
+                  numericInput("FullBath", "Full Bath", value = 0),
+                  numericInput("HalfBath", "Half Bath", value = 0),
+                  numericInput("Bedrooms", "Bedrooms", value = 0),
+
                         
-                        h1("Words!")
+                      
+                        
+                   
                       ), #This ends sidebarPanel
                       mainPanel(
                         
@@ -120,7 +134,9 @@ tabPanel("Data",
          sidebarLayout(
            sidebarPanel(
              
-             selectInput("Column", label = "Choose column", c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr"), multiple = TRUE),
+             checkboxGroupInput('columns','Columns to select', choices = c("Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+             numericInput("firstrow", "Select first row by Id number", value = 1),
+             numericInput("lastrow", "Select last row by Id number", value = 10),
            ), #This ends sidebarPanel
            mainPanel(
              DT::dataTableOutput("fancyTable")

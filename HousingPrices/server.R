@@ -178,6 +178,20 @@ rfpred <- reactive({
   results <- postResample(predtreefit, testdata()$SalePrice)
 })
 
+output$mlrformula <- renderPrint({
+  formula <- (paste(input$yvariable," ~ ",paste(input$mlrmodelinputs, collapse = "+")))
+  print(formula)
+})
+
+output$treeformula <- renderPrint({
+  formula <- (paste(input$yvariable," ~ ",paste(input$treemodelinputs, collapse = "+")))
+  print(formula)
+})
+
+output$rfformula <- renderPrint({
+  formula <- (paste(input$yvariable," ~ ",paste(input$rfmodelinputs, collapse = "+")))
+  print(formula)
+})
 output$mlrmodel <- renderPrint({
   results <- summary(mlrFit())
   print(results)
@@ -195,12 +209,22 @@ output$rfmodel <- renderPrint({
 
 output$predictions <- renderPrint({
   results <- data.frame(treepred(), mlrpred(), rfpred())
-  #results <- data.frame(results)
   print(results)
 })
 
+# Create prediction variables
+
+
 # Create data table for data tab
-data <- reactive({house})
+
+
+data <- reactive({
+  data <- house %>% select( Id, input$columns) %>% filter(Id >= input$firstrow &  Id <= input$lastrow)
+  })
+
+
+
+
 
 output$fancyTable <- DT::renderDataTable(datatable(data(), 
                                                    extensions = 'Buttons',
