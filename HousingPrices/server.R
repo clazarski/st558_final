@@ -118,7 +118,7 @@ output$edaPlot <- renderPlot({
   })
 
 #Create the train and test data sets
-traindata <- reactive({
+traindata <- eventReactive(input$splitbutton,{
   set.seed(1234)
   splitsize <- as.numeric(input$train)
   numObs <- nrow(house)
@@ -126,7 +126,7 @@ traindata <- reactive({
   traindata <- house[index,]
 })
 
-testdata <- reactive({
+testdata <- eventReactive(input$splitbutton,{
   set.seed(1234)
   splitsize <- as.numeric(input$train)
   numObs <- nrow(house)
@@ -135,7 +135,12 @@ testdata <- reactive({
 })
 
 
-
+output$datasets <- renderPrint({
+  train <- nrow(traindata())
+  test <- nrow(testdata())
+  data <- data.frame(train, test)
+  print(data)
+})
 
 
 mlrFit <- eventReactive(input$button,{

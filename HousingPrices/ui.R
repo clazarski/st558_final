@@ -77,7 +77,7 @@ navbarMenu("Modeling",
                     sidebarLayout(
                       sidebarPanel(
                         selectInput("train", label = "Select proportion of data to be used for training", c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1), selected = .8),
-                        actionButton("splitbutton", "Create data sets"),
+                        actionButton("splitbutton", "Click to create train and test data"),
                         selectInput("yvariable", label = "Y variable", "SalePrice"),
                         checkboxGroupInput('mlrmodelinputs','Variables for MLR model', choices = c("Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
                         checkboxGroupInput('treemodelinputs','Variables for Tree model', choices = c("Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
@@ -89,6 +89,7 @@ navbarMenu("Modeling",
                        
                       ), #This ends sidebarPanel
                       mainPanel(
+                        verbatimTextOutput("datasets"),
                         h1("MLR model results"),
                         verbatimTextOutput("mlrformula"),
                         verbatimTextOutput("mlrmodel"),
