@@ -25,9 +25,9 @@ shinyUI(fluidPage(
     sidebarPanel(
       
       #Choose variables for data exploration
-      selectInput("xvar", "Select X variable",c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+      selectInput("xvar", "Select X variable",c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Overall Quality" = "OverallQual", "Overall Condition"="OverallCond",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr", "Garage Cars" = "GarageCars")),
       
-      selectInput("yvar", "Select Y variable",c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+      selectInput("yvar", "Select Y variable",c("Sale Price" = "SalePrice","Lot Area" = "LotArea", "Overall Quality" = "OverallQual", "Overall Condition"="OverallCond",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr", "Garage Cars" = "GarageCars")),
       # Give graph options based on variable selected
       radioButtons("GraphSelect",
                   "Choose a graph",
@@ -79,9 +79,9 @@ navbarMenu("Modeling",
                         selectInput("train", label = "Select proportion of data to be used for training", c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1), selected = .8),
                         actionButton("splitbutton", "Click to create train and test data"),
                         selectInput("yvariable", label = "Y variable", "SalePrice"),
-                        checkboxGroupInput('mlrmodelinputs','Variables for MLR model', choices = c("Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
-                        checkboxGroupInput('treemodelinputs','Variables for Tree model', choices = c("Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
-                        checkboxGroupInput('rfmodelinputs','Variables for random forest model', choices = c("Lot Area" = "LotArea", "Neighborhood", "Building Type"="BldgType",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr")),
+                        checkboxGroupInput('mlrmodelinputs','Variables for MLR model', choices = c("Lot Area" = "LotArea", "Overall Quality" = "OverallQual", "Overall Condition"="OverallCond",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr", "Garage Cars" = "GarageCars")),
+                        checkboxGroupInput('treemodelinputs','Variables for Tree model', choices = c("Lot Area" = "LotArea", "Overall Quality" = "OverallQual", "Overall Condition"="OverallCond",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr", "Garage Cars" = "GarageCars")),
+                        checkboxGroupInput('rfmodelinputs','Variables for random forest model', choices = c("Lot Area" = "LotArea", "Overall Quality" = "OverallQual", "Overall Condition"="OverallCond",  "YearBuilt", "Square footage" ="GrLivArea", "Full Baths" = "FullBath", "Half Baths" = "HalfBath", "Bedrooms"= "BedroomAbvGr", "Garage Cars" = "GarageCars")),
                         actionButton("button", "Run Models"),
                         
                         
@@ -108,23 +108,24 @@ navbarMenu("Modeling",
            tabPanel("Prediction", 
                     sidebarLayout(
                       sidebarPanel(
-                        selectInput("model", label = "Select model for prediction", c("MLR", "Tree", "Random Forest")),
-                        
-                  numericInput("LotArea", "Lot Area", value = 0),
-                  numericInput("BldgType", "Building Type", value = 0),
-                  numericInput("YearBuilt", "Year BUilt", value = 0),
-                  numericInput("GrLivArea", "Square Footage", value = 0),
-                  numericInput("FullBath", "Full Bath", value = 0),
-                  numericInput("HalfBath", "Half Bath", value = 0),
-                  numericInput("Bedrooms", "Bedrooms", value = 0),
+                        selectInput("model", label = "Select model for prediction", c("MLR" = "1", "Tree"="2", "Random Forest"="3")),
+                  numericInput("LotArea", "Lot Area", value = NULL),
+                  numericInput("OverallQual", "Overall Quality", value = NULL),
+                  numericInput("OverallCond", "Overall Condition", value = NULL),
+                  numericInput("YearBuilt", "Year Built", value = NULL),
+                  numericInput("GrLivArea", "Square Footage", value = NULL),
+                  numericInput("FullBath", "Full Bath", value = NULL),
+                  numericInput("HalfBath", "Half Bath", value = NULL),
+                  numericInput("Bedrooms", "Bedrooms", value = NULL),
+                  numericInput("GarageCars", "Garage Cars", value = NULL),
 
-                        
                       
                         
                    
                       ), #This ends sidebarPanel
                       mainPanel(
-                        
+                        h1("Model selected"),
+                        textOutput("predmlrFit"),
                       )#This ends mainPanel
                     ) #This ends sidebarLayout
            ), #This ends Prediction tab

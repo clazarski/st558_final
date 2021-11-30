@@ -153,6 +153,7 @@ mlrFit <- eventReactive(input$button,{
 
 
 
+
 treeFit <- eventReactive(input$button,{
   formula <- as.formula(paste(input$yvariable," ~ ",paste(input$treemodelinputs, collapse = "+")))
   fit <- tree(formula, data=traindata())
@@ -171,16 +172,16 @@ rfFit <- eventReactive(input$button,{
 })
 
 mlrpred  <- reactive({
-  predtreefit <- predict(mlrFit(), newdata = testdata())
-  results <- postResample(predtreefit, testdata()$SalePrice)
+  predmlrfit <- predict(mlrFit(), newdata = testdata())
+  results <- postResample(predmlrfit, testdata()$SalePrice)
 })
 treepred <- reactive({
   predtreefit <- predict(treeFit(), newdata = testdata())
   results <- postResample(predtreefit, testdata()$SalePrice)
 })
 rfpred <- reactive({
-  predtreefit <- predict(rfFit(), newdata = testdata())
-  results <- postResample(predtreefit, testdata()$SalePrice)
+  predrffit <- predict(rfFit(), newdata = testdata())
+  results <- postResample(predrffit, testdata()$SalePrice)
 })
 
 output$mlrformula <- renderPrint({
@@ -217,7 +218,61 @@ output$predictions <- renderPrint({
   print(results)
 })
 
+
+
 # Create prediction variables
+
+output$predmlrFit <- 
+  renderPrint({
+    if (input$model == 1){
+      formula <- (paste(input$yvariable," ~ ",paste(input$mlrmodelinputs, collapse = "+")))
+      predmlrfit <- predict(mlrFit(), newdata = data.frame(
+        LotArea=c(input$LotArea), 
+        OverallQual = c(input$OverallQual),
+        OverallCond = c(input$OverallCond),
+        YearBuilt=c(input$YearBuilt),
+        GrLivArea = c(input$GrLivArea),
+        FullBath = c(input$FullBath),
+        HalfBath = c(input$HalfBath),
+        BedroomAbvGr = c(input$Bedrooms),
+        GarageCars = c(input$GarageCars)))
+      results <- paste("The predicted value is", predmlrfit)
+      print(results)
+      
+    }
+    else if (input$model == 2){
+      formula <- (paste(input$yvariable," ~ ",paste(input$treemodelinputs, collapse = "+")))
+      predtreefit <- predict(treeFit(), newdata = data.frame(
+        LotArea=c(input$LotArea), 
+        OverallQual = c(input$OverallQual),
+        OverallCond = c(input$OverallCond),
+        YearBuilt=c(input$YearBuilt),
+        GrLivArea = c(input$GrLivArea),
+        FullBath = c(input$FullBath),
+        HalfBath = c(input$HalfBath),
+        BedroomAbvGr = c(input$Bedrooms),
+        GarageCars = c(input$GarageCars)))
+      results <- paste("The predicted sale price is", predtreefit)
+      print(results)
+    }
+    else{
+      formula <- (paste(input$yvariable," ~ ",paste(input$rfmodelinputs, collapse = "+")))
+      predrffit <- predict(rfFit(), newdata = data.frame(
+        LotArea=c(input$LotArea), 
+        OverallQual = c(input$OverallQual),
+        OverallCond = c(input$OverallCond),
+        YearBuilt=c(input$YearBuilt),
+        GrLivArea = c(input$GrLivArea),
+        FullBath = c(input$FullBath),
+        HalfBath = c(input$HalfBath),
+        BedroomAbvGr = c(input$Bedrooms),
+        GarageCars = c(input$GarageCars)))
+      results <- paste("The predicted value is", predrffit)
+      print(results)    }
+  })
+
+
+
 
 
 # Create data table for data tab
