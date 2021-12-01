@@ -18,8 +18,27 @@ shinyUI(fluidPage(
   
   # About page panel
   tabPanel("About",
-           h1("This is the about page")
-          ),#End the about panel
+             img(src="house.png",height="75%", width="75%"),
+           
+           
+
+           h1("Purpose"),
+           h2("This app is an exploration of housing prices. Several numeric variables are able to be analyzed and used as predictors for the response, the sale price."),
+           h1("Data description"),
+           h2("This data was taken from a Kaggle competion. There are 1460 observations on 163 variables though only a subset are accessible through this app.",
+              br(),
+           a("Data Source",href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview")),
+           h1("Page descriptions"),
+           h2("Data Exploration"),
+           h3("This page allows the user to explore the distribution of a selected variable and view summary statistics. It also allows the user to plot two variables on a scatterplot and find the line of best fit between the selected variables."),
+           br(),
+           h2("Modeling page"),
+           h3("The modeling page consists of 3 sub pages. The first page allows the user to create a train and test data set and then apply that data set to a model of their choosing. There are three models that will be computed: Multiple linear regression, classification tree, and random forest. The user is able to choose the predictors for each model and the results will show how well each model performs on the test data set."),
+           h3("The prediction page allows the use to choose one of their models and then make a prediction by inputting values for the variables in the model."),
+           br(),
+           h2("Data page"),
+           h3("The user is able to construct a subset of the available data and download it for their own enjoyment."),
+      ),#End the about panel
   
   #EDA Panel
   tabPanel("Data Exploration",
@@ -112,10 +131,12 @@ shinyUI(fluidPage(
           selectInput("train", 
                       label = "Select proportion of data to be used for training", c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1), 
                       selected = .8),
-          selectInput("yvariable", "Response Variable", c("Sale Price" = "SalePrice")),
+          
           #Input to execute creation of test/train data 
           actionButton("splitbutton", 
                        "Click to create train and test data"),
+          #Response variable
+          selectInput("yvariable", "Response Variable", c("Sale Price" = "SalePrice")),
           #Predictor variable options for MLR model
           checkboxGroupInput('mlrmodelinputs',
                              'Variables for MLR model', 
