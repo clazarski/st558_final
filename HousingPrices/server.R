@@ -119,6 +119,8 @@ shinyServer(function(input, output, session) {
   }) #This ends the main plot Functions
 
 #Modeling page functions
+  
+  
   #Create the train and test data sets
   traindata <- eventReactive(input$splitbutton,{
     set.seed(1234)
@@ -300,17 +302,15 @@ shinyServer(function(input, output, session) {
   })
 
   #Code for showing the data table
-  output$fancyTable <- DT::renderDataTable(datatable(data(), 
-                                                   extensions = 'Buttons',
-                                                   options = list( 
-                                                     dom = "Blfrtip",
-                                                     buttons = 
-                                                       list("copy", list(
-                                                         extend = "collection"
-                                                         , buttons = c("csv", "excel", "pdf")
-                                                         , text = "Download"
+  output$fancyTable <- renderDataTable(datatable(data(), 
+                      extensions = 'Buttons',
+                      options = list( 
+                      dom = "Blfrtip",
+                      buttons = list("copy", list(extend = "collection"
+                                            , buttons = c("csv", "excel", "pdf")
+                                            , text = "Download"
                                                        ) ) 
-                                                   ))# end of buttons customizationselection = list(target = 'row+column'))
+                      ))# end of buttons customizationselection = list(target = 'row+column'))
 ) #End output table function
 
 

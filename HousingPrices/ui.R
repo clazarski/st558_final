@@ -98,6 +98,7 @@ shinyUI(fluidPage(
 
     mainPanel(
        #Show the selected graph
+      strong("Directions:"),"Choose the variables you want to explore. Once you choose a variable you will need to adjust the sliders to explore either the entire range of values or a subset. You can explore both variables using a scatterplot.",
        plotOutput("edaPlot"),
        #Show the best fit line if selected
        textOutput("LSRL"),
@@ -115,14 +116,19 @@ shinyUI(fluidPage(
   navbarMenu("Modeling", 
     #Modeling info page
     tabPanel("Modeling Info", 
-      sidebarLayout(
-        sidebarPanel(
-          h1("Words!")
-                    ), #This ends sidebarPanel
+      
         mainPanel(
-                        
+          h1("Explanation of models"),
+          h2("Multiple Linear Regresion"),
+          "Multiple linear regression models minimize the sum of the squared residuals:",
+          withMathJax(),
+          helpText("$$\\sum_{i=1}^n (y_i-\\hat{y_i})^2$$"),
+          "Multiple linear regression models are linear in the parameters so they are able to allow for interactions and operations on the predictors that allow for more model flexibility. A benefit to these models is that they can be interpreted in the context of the variabiles being used.",
+          h2("Classification Trees"),
+          "CLassification trees seeks to predict a continuous response by using the mean of a the observations in a given region for prediction. These models are easy to undersatns but can have high variability. Another benefit is that they automatically account for interactions whereas a multiple linear regression model has to explicitly include interaction effects.",
+          h2("Random Forest models"),
+          "Random forest models are composed of the average of many fitted trees. They use a random subset of the predictors rather than all of the predictors.This prevents a particularly good predictor from dominating the model. They use bootstrapping to obtain their estimates which reduces the variation. This model is very flexible but hard to interpret."
                   )#This ends mainPanel
-                    ) #This ends sidebarLayout
             ), #This ends Modeling info tab
     tabPanel("Model Fitting", 
       sidebarLayout(
@@ -178,6 +184,7 @@ shinyUI(fluidPage(
                         
         ), #This ends sidebarPanel
           mainPanel(
+            strong("Directions:")," Create your test set. Choose the variables for each model. Click run model and wait until the models are processed. You will see the results using the training data set and at the bottom you will see a comparison of all models using the test data.",
             h1("Data set properties"),
             textOutput("datasets"),
             h1("MLR model results"),
@@ -215,6 +222,7 @@ shinyUI(fluidPage(
         ), #This ends sidebarPanel
         
         mainPanel(
+          strong("Directions:"),"Select the model you want to use prediction and then input values for the variables in the model. The necessary variables are noted below in red.",
           h1("Model selected"),
           textOutput("predmlrFit"),
         )#This ends mainPanel
@@ -242,7 +250,7 @@ shinyUI(fluidPage(
            numericInput("lastrow", "Select last row by Id number", value = 10),
         ), #This ends sidebarPanel
         mainPanel(
-          DT::dataTableOutput("fancyTable")
+          dataTableOutput("fancyTable")
         )#This ends mainPanel
       ) #This ends sidebarLayout
     )#This ends Data tab 
