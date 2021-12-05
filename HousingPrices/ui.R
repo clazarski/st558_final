@@ -33,8 +33,7 @@ shinyUI(fluidPage(
            h3("This page allows the user to explore the distribution of a selected variable and view summary statistics. It also allows the user to plot two variables on a scatterplot and find the line of best fit between the selected variables."),
            br(),
            h2("Modeling page"),
-           h3("The modeling page consists of 3 sub pages. The first page allows the user to create a train and test data set and then apply that data set to a model of their choosing. There are three models that will be computed: Multiple linear regression, classification tree, and random forest. The user is able to choose the predictors for each model and the results will show how well each model performs on the test data set."),
-           h3("The prediction page allows the use to choose one of their models and then make a prediction by inputting values for the variables in the model."),
+           h3("The modeling page consists of 3 sub pages. The first page describes the models. The second page allows the user to create a train and test data set and then apply that data set to a model of their choosing. There are three models that will be computed: Multiple linear regression, classification tree, and random forest. The user is able to choose the predictors for each model and the results will show how well each model performs on the test data set. The prediction page allows the use to choose one of their models and then make a prediction by inputting values for the variables in the model."),
            br(),
            h2("Data page"),
            h3("The user is able to construct a subset of the available data and download it for their own enjoyment."),
@@ -125,7 +124,7 @@ shinyUI(fluidPage(
           helpText("$$\\sum_{i=1}^n (y_i-\\hat{y_i})^2$$"),
           "Multiple linear regression models are linear in the parameters so they are able to allow for interactions and operations on the predictors that allow for more model flexibility. A benefit to these models is that they can be interpreted in the context of the variabiles being used.",
           h2("Classification Trees"),
-          "CLassification trees seeks to predict a continuous response by using the mean of a the observations in a given region for prediction. These models are easy to undersatns but can have high variability. Another benefit is that they automatically account for interactions whereas a multiple linear regression model has to explicitly include interaction effects.",
+          "Classification trees seeks to predict a continuous response by using the mean of the observations in a given region for prediction. These models are easy to undersatnd but can have high variability. Another benefit is that they automatically account for interactions whereas a multiple linear regression model has to explicitly include interaction effects.",
           h2("Random Forest models"),
           "Random forest models are composed of the average of many fitted trees. They use a random subset of the predictors rather than all of the predictors.This prevents a particularly good predictor from dominating the model. They use bootstrapping to obtain their estimates which reduces the variation. This model is very flexible but hard to interpret."
                   )#This ends mainPanel
@@ -184,7 +183,7 @@ shinyUI(fluidPage(
                         
         ), #This ends sidebarPanel
           mainPanel(
-            strong("Directions:")," Create your test set. Choose the variables for each model. Click run model and wait until the models are processed. You will see the results using the training data set and at the bottom you will see a comparison of all models using the test data.",
+            strong("Directions:")," Create your test set. Choose the variables for each model. Click run model and wait until the models are processed. You will see the results using the training data set and at the bottom you will see a comparison of all models using the test data. Be patient, it may not look like it is doing anything but it is running and will eventually display the results.",
             h1("Data set properties"),
             textOutput("datasets"),
             h1("MLR model results"),
